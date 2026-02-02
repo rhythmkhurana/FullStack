@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Dynamic Product Filter</title>
+
+<style>
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #f4f6f8;
+}
+
+.container {
+  max-width: 900px;
+  margin: auto;
+  padding: 40px;
+}
+
+h1 {
+  margin-bottom: 20px;
+}
+select {
+  padding: 10px;
+  font-size: 16px;
+  margin-bottom: 30px;
+  background-color: rgb(146, 78, 78);
+  color: beige;
+  border: 2px solid orange;
+  border-radius: 10px;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 20px;
+}
+
+.card {
+  background: rgb(103, 93, 93);
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(111, 109, 109, 0.1);
+  transition: transform 0.3s ease;
+  color: beige;
+}
+
+.card:hover {
+  transform: scale(1.05);
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+  <h1>Product Filter</h1>
+
+  <select id="categorySelect">
+    <option value="All">All</option>
+    <option value="Electronics">Electronics</option>
+    <option value="Fashion">Fashion</option>
+    <option value="Education">Education</option>
+  </select>
+
+  <div class="grid" id="productGrid"></div>
+</div>
+
+<script>
+const products = [
+  { name: "Laptop", category: "Electronics" },
+  { name: "Phone", category: "Electronics" },
+  { name: "Shoes", category: "Fashion" },
+  { name: "T-Shirt", category: "Fashion" },
+  { name: "Book", category: "Education" }
+];
+
+const select = document.getElementById("categorySelect");
+const grid = document.getElementById("productGrid");
+
+function displayProducts(category) {
+  grid.innerHTML = "";
+
+  const filteredProducts =
+    category === "All"
+      ? products
+      : products.filter(p => p.category === category);
+
+  filteredProducts.forEach(product => {
+    const card = document.createElement("div");
+    card.className = "card";
+    card.innerHTML = `
+      <h2>${product.name}</h2>
+      <p>Category: ${product.category}</p>
+    `;
+    grid.appendChild(card);
+  });
+}
+
+select.addEventListener("change", () => {
+  displayProducts(select.value);
+});
+displayProducts("All");
+</script>
+
+</body>
+</html>

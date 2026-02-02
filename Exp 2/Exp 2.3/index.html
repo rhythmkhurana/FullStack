@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>SVG Drawing Tool</title>
+
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f0f0f0;
+        }
+
+        /* Toolbar */
+        .toolbar {
+            padding: 10px;
+            background: #ffffff;
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        /* SVG Canvas */
+        svg {
+            width: 100vw;
+            height: 80vh;
+            background: white;
+            border-top: 1px solid #ccc;
+            cursor: crosshair;
+        }
+
+        button, select {
+            padding: 5px 8px;
+        }
+    </style>
+</head>
+<body>
+
+<!-- Toolbar -->
+<div class="toolbar">
+    <label>Color:</label>
+    <input type="color" id="colorPicker" value="#000000">
+
+    <label>Shape:</label>
+    <select id="shape">
+        <option value="circle">Circle</option>
+        <option value="rect">Rectangle</option>
+    </select>
+
+    <button onclick="undo()">Undo</button>
+</div>
+
+<!-- SVG Canvas -->
+<svg id="canvas"></svg>
+
+<script>
+    let svg = document.getElementById("canvas");
+    let colorPicker = document.getElementById("colorPicker");
+    let shapeSelector = document.getElementById("shape");
+
+    let shapes = []; // store drawn shapes
+
+    // Mouse click event
+    svg.addEventListener("click", function (event) {
+        let x = event.offsetX;
+        let y = event.offsetY;
+        let color = colorPicker.value;
+        let shapeType = shapeSelector.value;
+
+        let shape;
+
+        if (shapeType === "circle") {
+            shape = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+            shape.setAttribute("cx", x);
+            shape.setAttribute("cy", y);
+            shape.setAttribute("r", 20);
+        } 
+        else {
+            shape = document.createElementNS("http://www.w3.org/2000/svg", "rect");
+            shape.setAttribute("x", x - 20);
+            shape.setAttribute("y", y - 20);
+            shape.setAttribute("width", 40);
+            shape.setAttribute("height", 40);
+        }
+        shape.setAttribute("fill", color);
+        svg.appendChild(shape);
+        shapes.push(shape);
+    });
+    // Undo function
+    function undo() {
+        let lastShape = shapes.pop();
+        if (lastShape) {
+            svg.removeChild(lastShape);
+        }
+    }
+</script>
+
+</body>
+</html>
